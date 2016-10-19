@@ -65,9 +65,11 @@ class Hand {
       // A vector of Cards
       Hand();
 
-      /*draws a card, places it in the vector, and adds it to the value.
-      @return nothing*/
+      /*draws a card, places it in the vector, and adds it to the value.*/
       void draw();
+
+      /*shows the hand*/
+      void show();
 
       /*returns value of the hand.
       @return a double of the total value.*/ 

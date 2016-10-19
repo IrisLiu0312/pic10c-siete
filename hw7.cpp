@@ -2,52 +2,25 @@
 #include <fstream>
 #include <string>
 #include <vector>
-#include <ctime>
-#include <cstdlib>
 #include "cards.h"
-using namespace std;
 
-// Global constants (if any)
+// Global constants
 const double THRESHOLD = 7.5; //Max value before busting
-
-// Non member functions declarations (if any)
-
-// Non member functions implementations (if any)
+const double DTHRESHOLD = 5.5; //dealer's threshold on drawing the next card
 
 int main(){
-   /*Game progression:
-   	Rules
-   		> 7.5 = bust
-	Beginning:
-		Player $ = 100
-		Dealer $ = 900
-	Every Round
-		P makes a bet
-		P draw card, D draw card, P cards are shown
-		Another card? (draw and repeat until total < 7.5 || no draw)
-		Show dealer's cards (who draws only if total < 5.5)
-	Calculation
-		(P1 > D) || (D bust)
-			P wins, P.$ += bet, D.$ -= bet
-		(D > P) || (P bust)
-			P loses, P.$ -= bet, D.$ += bet
-		(P bust) && (D bust) //house advantage
-			P loses, P.$ -= bet, D.$ += bet
-		(P == D) && (no one bust)
-			Tie, nothing happens
-	End game
-		(P.$ == 0) || (D.$ == 0)
-		Input validation may be required.
-	*/
 	//Initialize the players and their hands
 	Player player(100), dealer(900);
 	Hand play(), deal();
 	int round = 1,
 		bet = 0;
 	char reply = 'n';
+	double pValue = 0,
+		   dValue = 0;
 
 	//Welcome!
 	std::cout << "Welcome to Siete Y Medio." << std::endl;
+
 	//Check end game flags: neither player is broke
 	while( (!player.isBroke()) || (!dealer.isBroke()) ){
 		//Round
@@ -63,16 +36,79 @@ int main(){
 			cin >> bet;
 		}
 
-		//Draw cards and show
+		//Draw cards and show hand
 		std::cout << "Drawing a card each for player and dealer..." << std::endl;
 		play.draw();
 		deal.draw();
+		//show hand
+		play.show();
 
+		//continue?
+		std::cout << "Draw again (y/n)? ";
+		cin >> reply;
+		while(reply == 'y'){
+			play.draw();
+			play.show();
+			if(play.isBust()){
+				std::cout << "Busted! Player has finished drawing." << std::endl;
+				break;
+			}
+			std::cout << "Draw again (y/n)? ";
+			cin >> reply;
+		}
+
+		//dealer's turn
+		std::cout << "Dealer now drawing." << std::endl;
+		while(deal.getValue() < DTHRESHOLD)
+			deal.draw();
+		std::cout << "Dealer has finished drawing." << std::endl;
+
+		//====Calculation====
+		//extract values so we don't need to constantly call getValue()
+		pValue = play.getValue();
+		dValue = deal.getValue();
+
+		//Player busted
+		if(play.isBust()){
+			//Message
+			if(deal.isBust())
+				std::cout << "House advantage! Both have busted but you lose. -" << bet << std::endl;
+			else
+				std::cout << "Busted! You lose. -" << bet << std::endl;
+			//Lose money
+			player.decrease(bet);
+		} //Player DOESN'T bust but dealer does
+		else if(deal.isBust()){
+			std::cout << "Dealer busted! You win. +" << bet << std::endl;
+			player.increase(bet);
+			dealer.decrease(bet);
+		} //no one busted, equal value
+		else if(pValue == dValue)
+			std::cout << "Values are the same, tie. No money is moved." << std::endl;
+		else if(pValue > dValue){
+			std::cout << "You have a greater value than the dealer, you win. +" << bet << std::endl;
+			player.increase(bet);
+			dealer.decrease(bet);
+		} //last case: dealer has more than player
+		else{
+			std::cout << "The dealer has a greater value than you, you lose. -" << bet << std::endl;
+			player.decrease(bet);
+		}
+
+		//Current balance
+		std::cout << "You now have " << player.balance() << std::endl 
+				  << "The dealer has " << dealer.balance() << std::endl;
 
 		//End round
 		std::cout << "====End round " << round << "====" << std::endl << std::endl;
 		++round;
 	}
+
+	//Game has ended, check for the winner.
+	if(player.isBroke())
+		std::cout << "You have no more money. You lose." << std::endl;
+	else
+		std::cout << "The dealer lost $900. You win!" << std::endl;
 
    return 0;
 }
