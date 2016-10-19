@@ -64,9 +64,16 @@ class Hand {
       Hand();
 
       // You decide what functions you'll need...
+      /*returns value of the hand.
+      @return a double of the total value.*/
+      double getValue();
 
+      /*Checks whether the hand has busted.
+      @return true if busted, else false*/
+      bool isBust();
    private:
-      // You decide what fields you'll need...
+      vector<Card> cards;
+      double value;
 };
 
 
@@ -77,7 +84,22 @@ class Player {
       Player(int m);
 
       // You decide what functions you'll need...
+      /*increases money by m amount.
+      @param m to increase money by*/
+      void increase(int m);
 
+      /*decreases money by m amount, with the lower limit being 0.
+      @param m to decrease money by*/
+      void decrease(int m);
+
+      /*checks if player has m amount
+      @param m required money
+      @return true if yes, else false*/
+      bool has(int m);
+
+      /*checks if player has no more money
+      @return true if money == 0, else false*/
+      bool isBroke();
    private:
       int money;
       // You decide what extra fields (if any) you'll need...

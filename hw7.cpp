@@ -15,14 +15,8 @@ const double THRESHOLD = 7.5; //Max value before busting
 @param hand to check
 @return true if busted, else false
 */
-bool isBust(const Hand& hand);
 
 // Non member functions implementations (if any)
-bool isBust(const Hand& hand){
-	if(hand.getValue() > THRESHOLD)
-		return true;
-	return false;
-}
 
 int main(){
    /*Game progression:
@@ -49,6 +43,6 @@ int main(){
 		(P.$ == 0) || (D.$ == 0)
 		Input validation may be required.
 	*/
-	
+
    return 0;
 }
