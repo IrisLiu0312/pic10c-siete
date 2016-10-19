@@ -188,7 +188,37 @@ bool Card::operator < (Card card2) const {
 /* *************************************************
    Hand class
    ************************************************* */
-// Implemente the member functions of the Hand class here.
+Hand::Hand(){
+  //make an empty vector
+  std::vector<Card> cards;
+  //initialize value as 0.
+  value = 0;
+}
+
+/*draws a card, places it in the vector, and adds it to the value.
+@return nothing*/
+void Hand::draw(){
+  //draw a card
+  Card card();
+
+  //add value of card
+  if(card.get_rank() >= 10)
+    value += 0.5;
+  else
+    value += card.get_rank();
+
+  //place card in hand
+  cards.push_back(card);
+}
+
+/*returns value of the hand.
+@return a double of the total value.*/ 
+double Hand::getValue(){
+  return value;
+}
+
+/*Checks whether the hand has busted.
+      @return true if busted, else false*/
 bool Hand::isBust(){
   if(getValue() > THRESHOLD)
     return true;
@@ -199,4 +229,47 @@ bool Hand::isBust(){
 /* *************************************************
    Player class
    ************************************************* */
-// Implemente the member functions of the Player class here.
+//Initializes player with money m
+Player::Player(int m) : money(m){}
+
+/*gets the amount of money player has
+@return int amount*/
+int Player::balance(){
+  return money;
+}
+
+/*increases money by m amount.
+@param m to increase money by*/
+void Player::increase(int m){
+  money += m;
+  return;
+}
+
+/*decreases money by m amount, with the lower limit being 0.
+@param m to decrease money by*/
+void Player::decrease(int m){
+  //if money will go negative, just make it 0.
+  if((money - m) < 0 ) 
+    money = 0;
+  else
+    money -= m;
+  return;
+}
+
+/*checks if player has m amount
+@param m required money
+@return true if yes, else false*/
+bool Player::canBet(int m){
+  if(m > 0)
+    if(money >= m)
+      return true;
+  return false;
+}
+
+/*checks if player has no more money
+@return true if money == 0, else false*/
+bool Player::isBroke(){
+  if(money == 0)
+    return true;
+  return false;
+}

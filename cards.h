@@ -52,6 +52,8 @@ class Card {
       // Useful if you want to sort the cards.
       bool operator < (Card card2) const;
 
+      //destructor
+      virtual ~Card();
 private:
       suit_t suit;
       rank_t rank;
@@ -63,16 +65,22 @@ class Hand {
       // A vector of Cards
       Hand();
 
-      // You decide what functions you'll need...
+      /*draws a card, places it in the vector, and adds it to the value.
+      @return nothing*/
+      void draw();
+
       /*returns value of the hand.
-      @return a double of the total value.*/
+      @return a double of the total value.*/ 
       double getValue();
 
       /*Checks whether the hand has busted.
       @return true if busted, else false*/
       bool isBust();
+
+      //destructor
+      virtual ~Hand();
    private:
-      vector<Card> cards;
+      std::vector<Card> cards;
       double value;
 };
 
@@ -80,10 +88,13 @@ class Hand {
 class Player {
    public:
       // Constructor.
-      //    Assigns initial amount of money
+      // Assigns initial amount of money
       Player(int m);
 
-      // You decide what functions you'll need...
+      /*gets the amount of money player has
+      @return int amount*/
+      int balance();
+
       /*increases money by m amount.
       @param m to increase money by*/
       void increase(int m);
@@ -95,14 +106,16 @@ class Player {
       /*checks if player has m amount
       @param m required money
       @return true if yes, else false*/
-      bool has(int m);
+      bool canBet(int m);
 
       /*checks if player has no more money
       @return true if money == 0, else false*/
       bool isBroke();
+
+      //destructor
+      virtual ~Player();
    private:
       int money;
-      // You decide what extra fields (if any) you'll need...
 };
 
 #endif
