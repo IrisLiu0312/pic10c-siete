@@ -213,12 +213,11 @@ void Hand::draw(){
 
 /*shows the hand*/
 void Hand::show(){
-  std::cout << "Current hand: " << std::endl;
   for(size_t i = 0; i < cards.size(); ++i){
     std::cout << cards[i].get_english_suit() << " " << cards[i].get_english_rank() << " or "
               << cards[i].get_spanish_suit() << " " << cards[i].get_spanish_rank() << std::endl;
   }
-  std::cout << "Current value: " << getValue() << std::endl;
+  std::cout << "Value: " << getValue() << std::endl;
 }
 
 /*returns value of the hand.
