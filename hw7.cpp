@@ -14,6 +14,7 @@ int main(){
 	gamelog.open("gamelog.txt");
 	//Initialize the players and their hands
 	Player player(100);
+	Player dealer(900);
 	Hand play(), deal();
 	int round = 1,
 		bet = 0,
