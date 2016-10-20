@@ -9,11 +9,15 @@ const double THRESHOLD = 7.5; //Max value before busting
 const double DTHRESHOLD = 5.5; //dealer's threshold on drawing the next card
 
 int main(){
+	//create gamelog.txt
+	std::ofstream gamelog;
+	gamelog.open("gamelog.txt");
 	//Initialize the players and their hands
-	Player player(100), dealer(900);
+	Player player(100);
 	Hand play(), deal();
 	int round = 1,
-		bet = 0;
+		bet = 0,
+		win = 0; //player's win
 	char reply = 'n';
 	double pValue = 0,
 		   dValue = 0;
@@ -41,13 +45,15 @@ int main(){
 		play.draw();
 		deal.draw();
 		//show hand
+		std::cout << "Your hand:" << std::endl;
 		play.show();
 
 		//continue?
 		std::cout << "Draw again (y/n)? ";
 		cin >> reply;
-		while(reply == 'y'){
+		while(reply != 'n'){
 			play.draw();
+			std::cout << "Your hand:" << std::endl;
 			play.show();
 			if(play.isBust()){
 				std::cout << "Busted! Player has finished drawing." << std::endl;
@@ -82,13 +88,17 @@ int main(){
 			std::cout << "Dealer busted! You win. +" << bet << std::endl;
 			player.increase(bet);
 			dealer.decrease(bet);
+			win = 1;
 		} //no one busted, equal value
-		else if(pValue == dValue)
+		else if(pValue == dValue){
 			std::cout << "Values are the same, tie. No money is moved." << std::endl;
+			win = 2;
+		}
 		else if(pValue > dValue){
 			std::cout << "You have a greater value than the dealer, you win. +" << bet << std::endl;
 			player.increase(bet);
 			dealer.decrease(bet);
+			win = 1;
 		} //last case: dealer has more than player
 		else{
 			std::cout << "The dealer has a greater value than you, you lose. -" << bet << std::endl;
@@ -98,6 +108,25 @@ int main(){
 		//Current balance
 		std::cout << "You now have " << player.balance() << std::endl 
 				  << "The dealer has " << dealer.balance() << std::endl;
+
+		//Log everything to gamelog.txt
+		gamelog << "====Round " << round << "====" << std::endl
+				<< "--Player's hand--" << play.show() << "-----------------" << std::endl
+				<< "--Dealer's hand--" << deal.show(); << "----------------" << std::endl;
+		switch(win){
+			case 0:
+				gamelog << "Dealer's win." << std::endl;
+				break;
+			case 1: 
+				gamelog << "Player's win." << std::endl;
+				break;
+			case 2:
+				gamelog << "Tie." << std::endl;
+				break;
+		}
+		gamelog << "Player's balance: " << player.balance() << std::endl
+				<< "Dealer's balance: " << dealer.balance() << std::endl
+				<< "====End round " << round << "====" << std::endl << std::endl;
 
 		//End round
 		std::cout << "====End round " << round << "====" << std::endl << std::endl;
