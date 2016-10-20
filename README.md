@@ -1,31 +1,5 @@
-# pic10c-siete
-PIC10C Homework 1 - Siete y Medio
-
-Description:
-Your program is expected to:
-  1) play 'siete y medio' against you
-  2) keep a log of the rounds you played against the dealer.
-When you run your program, important information about every round should be recorded in the file "gamelog.txt".
-
-Game progression:
-   	Rule: Value > 7.5 = bust
-	Beginning:
-		Player $ = 100
-		Dealer $ = 900
-	Every Round:
-		P makes a bet
-		P draw card, D draw card, P cards are shown
-		Another card? (draw and repeat until total < 7.5 or no draw)
-		Show dealer's cards (who draws only if total < 5.5)
-	Calculation:
-		(P1 > D) or (D bust)
-			P wins, P.$ += bet, D.$ -= bet
-		(D > P) or (P bust)
-			P loses, P.$ -= bet, D.$ += bet
-		(P bust) and (D bust) -house advantage
-			P loses, P.$ -= bet, D.$ += bet
-		(P == D) and (no one bust)
-			Tie, nothing happens
-	End game
-		(P.$ == 0) or (D.$ == 0)
-		Input validation may be required.
+# PIC10C Homework 1 - Siete y Medio
+## Code Description
+Your program is expected to play 'siete y medio' against you and keep a log of the rounds you played against the dealer in the file "gamelog.txt".
+## Game Rules
+The player begins with $100, and draws cards until the accumulated value exceeds 7.5 or they stop after making a bet. The player compares values with the dealer, losing if they are less or they exceed 7.5. The game ends when the player has no more money or the dealer loses $900.
