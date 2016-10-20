@@ -13,7 +13,7 @@ int main(){
 	std::ofstream gamelog;
 	gamelog.open("gamelog.txt");
 	//Initialize the players and their hands
-	Player player(100), dealer(900);
+	Player player(100);
 	Hand play(), deal();
 	int round = 1,
 		bet = 0,
